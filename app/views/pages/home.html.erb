@@ -1,0 +1,19 @@
+<h1>Pages#home</h1>
+<p>Find me in app/views/pages/home.html.erb</p>
+<% if current_user %>
+  <p>Logged in as <%= current_user.email %></p>
+  <%= link_to "Log out", destroy_user_session_path, method: :delete %>
+  <br />
+  <% current_user.follow_requests.each do |request| %>
+    <%= request.followerable.email %> wants to follow you
+    <%= button_to "Accept", accept_path(request.followerable) %>
+    <%= button_to "Decline", decline_path(request.followerable) %>
+  <% end %>
+  <hr />
+  <% current_user.followers.each do |user| %>
+    <%= link_to user.email, profile_path(user) %> is following you
+    <%= button_to "Unfollow", unfollow_path(user) %>
+  <% end %>
+<% else %>
+  <%= link_to "Log in", new_user_session_path %>
+<% end %>
